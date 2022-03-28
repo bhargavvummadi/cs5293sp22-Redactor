@@ -35,7 +35,7 @@ def main(args):
         print(error)
     oppath= 'project1/'+output
     for f in files:
-        redactor_functions.file_reader(f,name,date,phone,concept,oppath,stats)
+        redactor_functions.file_reader(f,concept,oppath,stats)
 
 
 

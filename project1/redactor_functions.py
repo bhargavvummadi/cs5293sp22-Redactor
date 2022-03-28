@@ -14,7 +14,7 @@ import en_core_web_sm
 
 
 
-def file_reader(filename,name,date,phone,concept,output,stats):
+def file_reader(filename,concept,output,stats):
     file = open(filename,'r')
     stats_file = stats+".txt"
     write_stats_file = open(stats_file,"a",encoding="utf-8")
