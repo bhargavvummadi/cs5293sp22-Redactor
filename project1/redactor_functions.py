@@ -135,8 +135,8 @@ def redact_phone(file_content, write_stats_file):
     temp = str()
     kemp = str()
     lastmissingline = str()
-    pattern2 = re.compile("[+]?\d{1}-\d{3,5}-\d{3,5}-\d{3,5}")
-    pattern3 = re.compile("\s*?\d{3,5}\s+\d{3,5}\s+\d{3,5}")
+    pattern2 = re.compile(r"[+]?\d{1}-\d{3,5}-\d{3,5}-\d{3,5}")
+    pattern3 = re.compile(r"\s*?\d{3,5}\s+\d{3,5}\s+\d{3,5}")
     for i in range(len(file_content) - 1, 0, -1):
         if file_content[i] == '\n':
             ll = kemp.strip().split(" ")
@@ -396,8 +396,8 @@ def redact_address(file_content, write_stats_file):
     temp = ""
     kemp = str()
     lastmissingline = str()
-    pattern1 = re.compile("\d{3}\s[a-zA-Z]+\s[a-zA-Z]+")
-    pattern2 = re.compile("[a-zA-Z]+(,)?\s+[a-zA-Z]+\s+\d{5}")
+    pattern1 = re.compile(r"\d{3}\s[a-zA-Z]+\s[a-zA-Z]+")
+    pattern2 = re.compile(r"[a-zA-Z]+(,)?\s+[a-zA-Z]+\s+\d{5}")
     for i in range(len(file_content) - 1, 0, -1):
         if file_content[i] == '\n':
             ll = kemp.strip().split(" ")
