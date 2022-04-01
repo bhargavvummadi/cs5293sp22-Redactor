@@ -9,6 +9,7 @@ from nltk.stem.porter import *
 
 # used for os operations
 import os
+import sys
 # used for extracting from text files using specified patterns
 import re
 
@@ -41,16 +42,21 @@ def file_reader(filename, concept, output, stats):
     file = open(filename, 'r')
     stats_file = stats
     write_stats_file = open(stats_file, "a", encoding="utf-8")
-    write_stats_file.write(filename[9:] + "\n")
-    write_stats_file.write('*' * 100 + "\n")
     content = file.readlines()
+
+    wanted_filename = str(filename).split('/')[1]
+
+
     if stats_file == "stderr":
         stderr_file = 1
+        sys.stderr.write(wanted_filename + "\n")
+        sys.stderr.write('*' * 100 + "\n")
     elif stats_file == "stdout":
+        sys.stdout.write(wanted_filename + "\n")
+        sys.stdout.write('*' * 100 + "\n")
         stdout_file = 1
     else:
-        write_stats_file = open(stats_file, "a", encoding="utf-8")
-        write_stats_file.write(filename[9:] + "\n")
+        write_stats_file.write(wanted_filename + "\n")
         write_stats_file.write('*' * 100 + "\n")
         
     op = redact_name(content, write_stats_file)
@@ -59,7 +65,7 @@ def file_reader(filename, concept, output, stats):
     op = redact_gender(op, write_stats_file)
     op = redact_address(op, write_stats_file)
     op = redact_concept(op, concept, write_stats_file)
-    write_output(output, op, filename)
+    write_output(output, op, wanted_filename)
 
 
 def redact_name(file_content, write_stats_file):
@@ -88,7 +94,7 @@ def redact_name(file_content, write_stats_file):
                     sys.stderr.write(token.ent_type_ + "---" + token.text +
                                        "\n")
                 elif stdout_file == 1:
-                    print(token.ent_type_ + "---" + token.text +
+                    sys.stdout.write(token.ent_type_ + "---" + token.text +
                                        "\n")
                 else:
                     write_stats_file.write(token.ent_type_ + "---" + token.text +
@@ -100,7 +106,13 @@ def redact_name(file_content, write_stats_file):
             else:
                 op.append(token.text)
                 op.append(" ")
-    write_stats_file.write(" NAME COUNT: " + str(name_count) + "\n")
+    if stderr_file == 1:
+        sys.stderr.write(" NAME COUNT: " + str(name_count) + "\n")
+    elif stdout_file == 1:
+        sys.stdout.write(" NAME COUNT: " + str(name_count) + "\n")
+    else:
+        write_stats_file.write(" NAME COUNT: " + str(name_count) + "\n")
+
 
     return op
 
@@ -171,7 +183,14 @@ def redact_phone(file_content, write_stats_file):
             temp_temp = temp_temp.replace(" ", "")
             temp_temp2 = " ".join(re.findall(r"\d+", temp))
             if (re.search(pattern2, temp_temp)):
-                write_stats_file.write("PHONE-NUMBER" + "---" + temp_temp +
+                if stderr_file ==1:
+                    sys.stderr.write("PHONE-NUMBER" + "---" + temp_temp +
+                                           "\n")
+                elif stdout_file == 1:
+                    sys.stdout.write("PHONE-NUMBER" + "---" + temp_temp +
+                                           "\n")
+                else:
+                    write_stats_file.write("PHONE-NUMBER" + "---" + temp_temp +
                                        "\n")
                 phone_number_count += 1
                 flag = 1
@@ -230,7 +249,15 @@ def redact_phone(file_content, write_stats_file):
         op.append(" ")
     else:
         op.append(lastmissingline)
-    write_stats_file.write(" PHONE-NUMBER-COUNT: " + str(phone_number_count) +
+
+    if stderr_file == 1:
+        sys.stderr.write(" PHONE-NUMBER-COUNT: " + str(phone_number_count) +
+                               "\n")
+    elif stdout_file == 1:
+        sys.stdout.write(" PHONE-NUMBER-COUNT: " + str(phone_number_count) +
+                               "\n")
+    else:
+        write_stats_file.write(" PHONE-NUMBER-COUNT: " + str(phone_number_count) +
                            "\n")
     #print("".join(op))
     return op
@@ -266,14 +293,24 @@ def redact_date(file_content, write_stats_file):
             if token.ent_type_ == 'DATE' or len(all) > 0 or len(
                     all2) > 0 or len(all3) > 0 or len(all4) > 0:
                 date_count += 1
-                write_stats_file.write("DATE" + "---" + token.text + "\n")
+                if stderr_file ==1:
+                    sys.stderr.write("DATE" + "---" + token.text + "\n")
+                elif stdout_file == 1:
+                    sys.stdout.write("DATE" + "---" + token.text + "\n")
+                else:
+                    write_stats_file.write("DATE" + "---" + token.text + "\n")
                 for i in range(len(token.text)):
                     op.append('\u2588')
                 op.append(" ")
             else:
                 op.append(token.text)
                 op.append(" ")
-    write_stats_file.write("DATE-COUNT: " + str(date_count) + "\n")
+    if stderr_file == 1:
+        sys.stderr.write("DATE-COUNT: " + str(date_count) + "\n")
+    elif stdout_file == 1:
+        sys.stdout.write("DATE-COUNT: " + str(date_count) + "\n")
+    else:
+        write_stats_file.write("DATE-COUNT: " + str(date_count) + "\n")
     #print("".join(op))
     return op
 
@@ -321,7 +358,14 @@ def redact_gender(file_content, write_stats_file):
             ) in gender_list:
                 if token.text.lower() in gender_list:
                     gender_count += 1
-                    write_stats_file.write("GENDER" + "---" +
+                    if stderr_file ==1:
+                        sys.stderr.write("GENDER" + "---" +
+                                               token.text.lower() + "\n")
+                    elif stdout_file ==1:
+                        sys.stdout.write("GENDER" + "---" +
+                                               token.text.lower() + "\n")
+                    else:
+                        write_stats_file.write("GENDER" + "---" +
                                            token.text.lower() + "\n")
                 for i in range(len(token)):
                     op.append('\u2588')
@@ -330,7 +374,12 @@ def redact_gender(file_content, write_stats_file):
                 op.append(token.text)
                 #op.append(" ")
     #print("".join(op))
-    write_stats_file.write("GENDER-COUNT :" + str(gender_count) + "\n")
+    if stderr_file==1:
+        sys.stderr.write("GENDER-COUNT :" + str(gender_count) + "\n")
+    elif stdout_file==1:
+        sys.stdout.write("GENDER-COUNT :" + str(gender_count) + "\n")
+    else:
+        write_stats_file.write("GENDER-COUNT :" + str(gender_count) + "\n")
     return op
 
 
@@ -431,7 +480,12 @@ def redact_address(file_content, write_stats_file):
             ll = temp.strip().split(" ")
             if (re.search(pattern1, temp)):
                 address_count += 1
-                write_stats_file.write("ADDRESS" + "---" + temp + "\n")
+                if stderr_file ==1:
+                    sys.stderr.write("ADDRESS" + "---" + temp + "\n")
+                elif stdout_file == 1:
+                    sys.stdout.write("ADDRESS" + "---" + temp + "\n")
+                else:
+                    write_stats_file.write("ADDRESS" + "---" + temp + "\n")
                 for i in range(len(temp)):
                     op.append('\u2588')
                 op.append("\n")
@@ -452,7 +506,12 @@ def redact_address(file_content, write_stats_file):
             temp += file_content[i]
 
     op.append(lastmissingline)
-    write_stats_file.write("ADDRESS-COUNT :" + str(address_count) + "\n")
+    if stderr_file==1:
+        sys.stderr.write("ADDRESS-COUNT :" + str(address_count) + "\n")
+    elif stdout_file ==1:
+        sys.stdout.write("ADDRESS-COUNT :" + str(address_count) + "\n")
+    else:
+        write_stats_file.write("ADDRESS-COUNT :" + str(address_count) + "\n")
     #print("".join(op))
     return op
 
@@ -497,7 +556,12 @@ def redact_concept(file_content, concept, write_stats_file):
                     print("Foud a match")
                     flag = 1
                     concept_count += 1
-                    write_stats_file.write("CONCEPT" + "---" + r + "\n")
+                    if stderr_file ==1:
+                        sys.stderr.write("CONCEPT" + "---" + r + "\n")
+                    elif stdout_file ==1:
+                        sys.stdout.write("CONCEPT" + "---" + r + "\n")
+                    else:
+                        write_stats_file.write("CONCEPT" + "---" + r + "\n")
                     #print(token)
             if flag == 1:
                 for i in range(len(r)):
@@ -507,9 +571,15 @@ def redact_concept(file_content, concept, write_stats_file):
         if flag != 1:
             op.append(l)
             op.append("\n")
-
-    write_stats_file.write("CONCEPT-COUNT :" + str(concept_count) + "\n")
-    write_stats_file.write('*' * 200 + '\n')
+    if stderr_file ==1:
+        sys.stderr.write("CONCEPT-COUNT :" + str(concept_count) + "\n")
+        sys.stderr.write('*' * 200 + '\n')
+    elif stdout_file ==1:
+        sys.stdout.write("CONCEPT-COUNT :" + str(concept_count) + "\n")
+        sys.stdout.write('*' * 200 + '\n')
+    else:
+        write_stats_file.write("CONCEPT-COUNT :" + str(concept_count) + "\n")
+        write_stats_file.write('*' * 200 + '\n')
     #print("".join(op))
     return op
 
@@ -530,8 +600,9 @@ def write_output(dirr, res, filename):
     '''
     #print("".join(res))
     print(dirr)
+    print(filename)
     filename = str(filename).split('.')[0]
-    req_file = filename[9:] + '.redacted'
+    req_file = filename + '.redacted'
     op_file = open(dirr + req_file, "w", encoding="utf-8")
     op_file.write("".join(res))
     op_file.close()

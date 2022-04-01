@@ -4,6 +4,7 @@ import argparse
 import glob
 import os
 import redactor_functions
+import shutil
 
 
 def main(args):
@@ -19,14 +20,17 @@ def main(args):
     concept = args.concept
     output = args.output
     stats = args.stats
-    if os.path.exists(stats + ".txt"):
-        os.remove(stats + ".txt")
+    if os.path.exists(stats):
+        os.remove(stats)
     else:
         pass
     ip = 'project1/' + ip
     print(ip)
     files = glob.glob(ip)
     path = os.path.join('project1/', output)
+    if os.path.exists(path) and os.path.isdir(path):
+        shutil.rmtree(path)
+
     try:
         os.makedirs(path, exist_ok=True)
     except OSError as error:
