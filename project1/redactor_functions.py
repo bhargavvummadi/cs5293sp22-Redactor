@@ -18,6 +18,12 @@ from spacy.matcher import Matcher
 import en_core_web_sm
 
 
+#Global flags
+
+stderr_file = 0
+stdout_file = 0
+
+
 def file_reader(filename, concept, output, stats):
     '''
        File_reader takes the following parameters
@@ -33,12 +39,20 @@ def file_reader(filename, concept, output, stats):
        functions.
     '''
     file = open(filename, 'r')
-    stats_file = stats + ".txt"
+    stats_file = stats
     write_stats_file = open(stats_file, "a", encoding="utf-8")
     write_stats_file.write(filename[9:] + "\n")
     write_stats_file.write('*' * 100 + "\n")
-    print("function is called")
     content = file.readlines()
+    if stats_file == "stderr":
+        stderr_file = 1
+    elif stats_file == "stdout":
+        stdout_file = 1
+    else:
+        write_stats_file = open(stats_file, "a", encoding="utf-8")
+        write_stats_file.write(filename[9:] + "\n")
+        write_stats_file.write('*' * 100 + "\n")
+        
     op = redact_name(content, write_stats_file)
     op = redact_phone(op, write_stats_file)
     op = redact_date(op, write_stats_file)
@@ -69,10 +83,15 @@ def redact_name(file_content, write_stats_file):
     for l in file_content:
         doc = nlp_obj(l)
         for token in doc:
-            #print(token,token.ent_type_)
-            #ORG- not .com or AM/PM
             if token.ent_type_ == 'PERSON' or token.ent_type_ == 'GPE':
-                write_stats_file.write(token.ent_type_ + "---" + token.text +
+                if stderr_file == 1:
+                    sys.stderr.write(token.ent_type_ + "---" + token.text +
+                                       "\n")
+                elif stdout_file == 1:
+                    print(token.ent_type_ + "---" + token.text +
+                                       "\n")
+                else:
+                    write_stats_file.write(token.ent_type_ + "---" + token.text +
                                        "\n")
                 name_count = name_count + 1
                 for i in range(len(token)):
