@@ -140,7 +140,7 @@ explanation to run the project.
   There will be console output as below:
   ```sh
      Redacted File: file_3.txt and stored successfully
-            ********************************************************************************************************************************************************************************************************
+           ********************************************************************************************************************************************************************************************************
   Redacted File: file_2.txt and stored successfully
   **********************************************************************************************************************************************************************  **********************************
   Redacted File: file_1.txt and stored successfully
@@ -163,46 +163,58 @@ _Hint Use 'rm -rf virtualenv_name' before creating a virtualenv with same name_
 
 <!-- Functionalities -->
 ## Functionalities
-All the the files are placed insided project0 subfolder.
-- [x] main.py
-  This file uses argparse module to create custom command line arguments like --incidents which is mandatory followed by url.
-  I have added --dbname argument so that user can give custom name to create database --dbname "oupd.db".
+All the the files are placed insided project1 subfolder.
+- [x] redactor.py
+  This file uses argparse module to create custom command line arguments as --input, --concept, --output and --stats which are mandatory.
+  I have used argparse attribute 'action' for making values not required for --names --dates --phones --genders --address cmd line attributes.
   It imports all other .py files as modules as calls each of their functionality.
-- [x] fetch.py
-  This file uses urllib.requests module to get a valid response as a blob object
-  Returns the object to dataextractor
-- [x] dataextractor.py
-    It uses pypdf2,re and tempfiles modules.
-    The main functionality is to get data page by page using pypdf2 package.
-    Then I used list of lists to stored the incidents data in the required format. 
-    (logic is simple - once cracked) 😄 
-    Managed double liners and replaced empty cell with 'NaN' value.
-    Returns a list containing many lists.
-- [x] dboperations.py
-    - [ ] createdb - creates a database with incidents table and returns db name
-    - [ ] populatedb - inserts incident data into table
-    - [ ] status - sorts data first based on nature count and then alphabetically, finally
-    prints in pipe seperated format. 
+  It passes all the values of command line arguments to main method
+  - [ ] main(args)- method
+         In this method it first checks for the previous stats file if it is present it removes it and creates a new one, else just creates a new one
+         Similarly it checks for the output directory if it is previously created removes it using shutil and creates a new one.
+         Takes all the inputs from glob objects
+         Passes each file to a function in redactor_functions.py
+- [x] redactor_functions.py
+      I have used a list redactor approach, where I redacted contents of files based on each flag and pass the redacted data to
+      the other flags which will use the redacted list and finally write redacted data to output files and store in a directory.
+    - [ ] file_reader - It takes all the required arguments and file passed from main.py and reads the contents of file and 
+          checks for what type of stats file and flags it. The contents of file and respective stats file and/or concept is 
+          passed to subsequent methods.
+    - [ ] redact_names - redacts names using spacy entities and en_web_core_sm module and returns redacted list op.Writes to stats file. 
+    - [ ] redact_phone - redacts phone numbers using spacy rule based matching and regex and returns redacted list op. Writes to stats file.
+    - [ ] redact_dates - redacts dates using spacy entities and en_web_core_sm and regex and returns redacted list op. Writes to stats file.
+    - [ ] redact_gender - redacts gender using generalized gender list returns redacted list op. Writes to stats file. (tried lemmitization but results are not as expected so went with te gender-list).
+    - [ ] redact_address - redacts addresses using generalized us state list regex and returns redacted list op. Writes to stats file.
+    - [ ] redact_concept - redacts based on the concept. Here I used Stemmization on each word of the input file. I have using ```wordnet``` to
+          get synonyms of concept that is passed. If any of the stemmized word is matched with any of the synonym of concept, I just redacted the
+          entire sentence. I tought it is easiest way to do. Returns the redacted list op. Writes the stats file.
+    - [ ] write_output - Takes the final redacted op list and writes it into filename.redacted.
+  
  
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- Test cases -->
 ## Test cases
-I have tested all the functionalities in a single test file `test_main.py`.
-- [x] test_fetch_operation(url)
-   Tests whether url returns a valid reposne code(200) or not.
-- [x]  test_data_extraction(...)
-  This function takes five attributes of file and checks whether the 
-  data is present in the given pdf or not, also asserts data is retrived is 
-  not none.
-- [x] create_db()
-    Tests whether the created table is present in database or not.
-- [x] test_for_populate()
-    Tests whether data is inserted or not with `SELECT` query. 
-- [x] test_for_status()
-    Tests whether data is sorted alphabetically or not
-    Tests whether data is pipe sepaerated or not
+I have tested all the functionalities in a single test file `test_redactor.py`.
+I have used filetest.txt for testig purpose. Change code in test file for testing other file
+change this line ```tf = "tests/filetest.txt" ``` to ```tf = "tests/INPUT_TEST_FILE" ```.
+Generates fileteststats.txt stats output file.
+- [x] test_redact_names(file_content,file_stat)
+   Test and compares with the count of redacted names from stats file.
+- [x] test_redact_phone(file_content,file_stat)
+   Test and compares with the count of redacted phone numbers from stats file.
+- [x] test_redact_date(file_content,file_stat)
+   Test and compares with the count of redacted dates  from stats file.
+- [x] test_redact_gender(file_content,file_stat)
+   Test and compares with the count of redacted genders from stats file.
+- [x] test_redact_address(file_content,file_stat)
+   Test and compares with the count of redacted address from stats file.
+- [x] test_redact_concept(file_content,concept,file_stat)
+   Test and compares with the count of redacted concept lines from stats file.
+- [x]  test_write_output(concept,output,new_stats)
+  Tests whether the file is redacted and stored in the redact_test_files/ directory.
+* I have re-used the stats file for testing by closing and opening after each method.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
