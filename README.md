@@ -9,7 +9,7 @@
 
 <br />
 
-<h2 align="center">Redactor</h2>
+<h2 align="center">The Redactor</h2>
 <br />
 
 <!-- TABLE OF CONTENTS -->
@@ -38,20 +38,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Norma police department basically collects daily activity reports based on arrests, incidents,case summaries.
-These data is stored in pdf format for every day and can be deleted and modified into a monthly summaries. But,
-in this project we aim at only collecting the incidents data which is stored in pdf format. When a url is provided
-we need to fetch the data and make some data cleaning and adjustments and make a database to store this data. Finally
-we can see the pipe '|' seperated data on the console which sorted alphabetically on nature and sorted based on number
-of times it has occured.
+Whenever sensitive information is shared with the public, the data must go through a redaction process. That is, all sensitive names, places, and other sensitive information must be hidden. Documents such as police reports, court transcripts, and hospital records all contain sensitive information. Redacting this information is often expensive and time consuming. In the project I used data from Enrom email dataset, I took a small chunk of data and made four test files to redact based on various features like names, phone numbers, address, dates and concept. Storing the redacted files in a seperate directory given by the user. Finally a stats file is created which shows statistics of all redacted data.
 
-Here's the over:
+Here's the overview of project:
 <ul>
-  <li> Fetching url responose</li>
-  <li> Getting data from url blob object</li>
-  <li> Creating Database and incidents table </li>
-  <li> Inserting Data </li>
-  <li> Printing pipe seperated and sorted data </li>
+  <li> Getting input files</li>
+  <li> Redacting features (--names --dates --phones --genders --address)</li>
+  <li> Redacting based on concept </li>
+  <li> Storing redacted data </li>
+  <li> Writing the statistics to a file</li>
 </ul>
 
 Author Details
