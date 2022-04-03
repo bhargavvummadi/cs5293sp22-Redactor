@@ -25,7 +25,6 @@ def main(args):
     else:
         pass
     ip = 'project1/' + ip
-    print(ip)
     files = glob.glob(ip)
     path = os.path.join('project1/', output)
     if os.path.exists(path) and os.path.isdir(path):

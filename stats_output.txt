@@ -1,0 +1,73 @@
+filetest.txt
+****************************************************************************************************
+PERSON---Rita
+PERSON---Morales
+PERSON---<
+PERSON---Rita
+PERSON---gilbert
+PERSON---smith
+GPE---Austin
+PERSON---Don
+PERSON---Bender
+PERSON---Susan
+PERSON---Neel
+PERSON---Johnny
+PERSON---Roberts
+PERSON---Paul
+PERSON---McKinney
+PERSON---Dave
+PERSON---Odle
+PERSON---Sonya
+PERSON---Howell
+PERSON---John
+PERSON---Hudson
+PERSON---Susan
+PERSON---Neel
+PERSON---Rita
+PERSON---Morales
+PERSON---gilbert
+PERSON---smith
+PERSON---Corpus
+PERSON---Christi
+ NAME COUNT: 29
+PHONE-NUMBER---wk:972538-6983
+
+PHONE-NUMBER---972 538 - 6983
+PHONE-NUMBER---cell:972816-2118
+
+PHONE-NUMBER---972 816 - 2118
+PHONE-NUMBER---1-361-887-1600
+ PHONE-NUMBER-COUNT: 5
+DATE---Feb
+DATE---2002
+DATE---Friday
+DATE---2/01
+DATE---73071
+DATE---15_2_1.doc
+DATE---30
+DATE---Jan
+DATE---2002
+DATE---February
+DATE---14th
+DATE---and
+DATE---15th
+DATE---
+
+DATE---February
+DATE---14th
+DATE---and
+DATE---15th
+DATE---78401
+DATE-COUNT: 19
+GENDER---she
+GENDER---herself
+GENDER---he
+GENDER---him
+GENDER---father
+GENDER-COUNT :5
+ADDRESS---     900 N Shoreline Blvd 
+
+ADDRESS-COUNT :1
+CONCEPT--- Kids are playing in the school 
+CONCEPT-COUNT :1
+********************************************************************************************************************************************************************************************************

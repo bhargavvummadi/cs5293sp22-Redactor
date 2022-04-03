@@ -66,6 +66,8 @@ def file_reader(filename, concept, output, stats):
     op = redact_address(op, write_stats_file)
     op = redact_concept(op, concept, write_stats_file)
     write_output(output, op, wanted_filename)
+    print('Redacted File:',wanted_filename, 'and stored successfully')
+    print('*'*200)
 
 
 def redact_name(file_content, write_stats_file):
@@ -231,7 +233,6 @@ def redact_phone(file_content, write_stats_file):
 
     lastmissingline_temp = lastmissingline
     lastmissingline_temp = lastmissingline_temp.replace(" ", "")
-    print(lastmissingline)
     lastmissingline_temp2 = " ".join(re.findall(r"\d+", lastmissingline))
     if (re.search(pattern2, lastmissingline_temp)):
         phone_number_count += 1
@@ -545,7 +546,6 @@ def redact_concept(file_content, concept, write_stats_file):
 
     req = "".join(file_content)
     porterStemmer = PorterStemmer()
-    print(type(req))
     for l in req.split('\n'):
         flag = 0
         for r in l.split('.'):
@@ -553,7 +553,7 @@ def redact_concept(file_content, concept, write_stats_file):
             sw = [porterStemmer.stem(w) for w in wl]
             for token in sw:
                 if str(token) in synonyms:
-                    print("Foud a match")
+                    #print("Foud a match")
                     flag = 1
                     concept_count += 1
                     if stderr_file ==1:
@@ -567,7 +567,6 @@ def redact_concept(file_content, concept, write_stats_file):
                 for i in range(len(r)):
                     op.append('\u2588')
                 op.append("\n")
-                print(r)
         if flag != 1:
             op.append(l)
             op.append("\n")
@@ -599,8 +598,6 @@ def write_output(dirr, res, filename):
         ----------------------------------------------------
     '''
     #print("".join(res))
-    print(dirr)
-    print(filename)
     filename = str(filename).split('.')[0]
     req_file = filename + '.redacted'
     op_file = open(dirr + req_file, "w", encoding="utf-8")
