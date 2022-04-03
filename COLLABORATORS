@@ -1,0 +1,21 @@
+name,address default, https://docs.python.org/3/library/argparse.html#action, Helped me with passing arguments without value
+
+removing a file, https://www.w3schools.com/python/python_file_remove.asp, Helped me with deleting a file
+
+numbers in a sentence, https://stackoverflow.com/questions/12419998/find-numbers-in-a-sentence-by-regex, Helped me with removing numbers from a sentence
+
+understanding briefly nltk, https://towardsdatascience.com/named-entity-recognition-with-nltk-and-spacy-8c4a7d88e7da, Helped me with nltk and spacy
+
+getting synonyms concept, https://www.w3resource.com/python-exercises/nltk/nltk-corpus-exercise-7.php, Helped with concept part of project
+
+
+getting stemmization concept, https://medium.com/@tusharsri/nlp-a-quick-guide-to-stemming-60f1ca5db49e, helped me with stemmization
+
+
+getting tokenization and matching, https://towardsdatascience.com/a-quick-guide-to-tokenization-lemmatization-stop-words-and-phrase-matching-using-spacy-nlp-b29b407adbfc, helped me with spacy 
+
+spacy rule based matcher, https://explosion.ai/demos/matcher?, helped me with spacy rule based matching
+
+regex helper, https://regex101.com/, helped me with building regex and testing
+
+stderr,stdout, https://www.askpython.com/python/python-stdin-stdout-stderr, helped me with understing concept of writing to stderr and stdout
