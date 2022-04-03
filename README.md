@@ -68,19 +68,18 @@ To get the project up and running follow these simple example steps.
 ### Prerequisites
 
 * First created a project structer as follows:
-* ![image](https://user-images.githubusercontent.com/52027911/157352583-9a8a99a5-f18d-4926-a81f-bb504a948025.png)
+* ![image](https://user-images.githubusercontent.com/52027911/161438787-a46bcd76-4b65-4b1a-b683-53eaf19d24b2.png)
+
 
 * Python 
   ```sh
   sudo apt install -y python3 ipython3 python3-pip
   ```
- * Norman PD incidents pdf.
-   I have decided to used some particular file and used them in my project. I have used github css5293sp22 repo (as it is public and github doesn't charge for storing files)
-   my own to store this pdfs and access them rather than continuously hitting the norman pd website.
-  ```sh
-    https://github.com/bhargavvummadi/cs5293sp22/raw/main/2022-01-03_daily_incident_summary.pdf
-    https://github.com/bhargavvummadi/cs5293sp22/raw/main/2022-01-26_daily_incident_summary.pdf
-  ```
+ * Input data for redacting the data.
+ * I have taken some files from huge Enrom email dataset files.
+ * Named them file_1.txt,file_2.txt,file_3.txt and file_4.txt.
+ * Place them inside the project1/ folder.
+
   
 
 ### Packages 
@@ -89,11 +88,11 @@ _Below are the packages or modules that I have used in my project._
 
 1. pipenv
 2. black
-3. urllib.response
-4. tempfiles
+3. nltk
+4. spacy
 5. pypdf2
 6. re
-7. sqlite3
+7. shutil
 8. os 
 9. sys
 10. pytest
