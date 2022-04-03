@@ -86,16 +86,15 @@ To get the project up and running follow these simple example steps.
 
 _Below are the packages or modules that I have used in my project._
 
-1. pipenv
-2. black
-3. nltk
-4. spacy
-5. pypdf2
-6. re
-7. shutil
-8. os 
-9. sys
-10. pytest
+1. nltk
+2. spacy
+3. glob
+4. re
+5. shutil
+6. os 
+7. sys
+8. argparse
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -109,11 +108,11 @@ explanation to run the project.
 
 * First clone the project into your instance
   ```sh
-    git clone https://github.com/bhargavvummadi/cs5293sp22-project0
+    git clone https://github.com/bhargavvummadi/cs5293sp22-project1
   ```
 * Change directory to cloned repository
   ```sh
-     cd cs5293sp22-project0
+     cd cs5293sp22-project1
   ```
 * Now let's creata a virtual environment for our project using pipenv
   ```sh
@@ -122,21 +121,32 @@ explanation to run the project.
   Activate the virtual environment with `pipenv shell`
 * Now we need to install required packages (if in case required)
   ```sh
-    pipenv install PyPDF2
+    pipenv install nltk
+    pipenv install spacy
+    pipenv run python -m spacy download en_core_web_sm
     pipenv install pytest
   ```
 * Running the project `main.py`
   ```sh
-    pipenv run python project0/main.py --incidents "https://github.com/bhargavvummadi/cs5293sp22/raw/main/2022-01-03_daily_incident_summary.pdf"
+     pipenv run python project1/redactor.py --input '*.txt'  --names --dates --phones --address --gender --concept 'kids' --output 'files/' --stats stderr
   ```
-  It will generate output with pipe seperated data as below:
+  or 
   ```sh
-     Abdominal Pains/Problems | 2
-     Alarm | 12  
-     Alarm Holdup/Panic | 2
-     Animal Complaint | 2
-     Animal Dead | 2
-     Animal Injured | 1
+     pipenv run python project1/redactor.py --input '*.txt'  --names --dates --phones --address --gender --concept 'kids' --output 'files/' --stats stats
+  ```
+  
+  It will generate all redacted files and store them inside files/ folder with .redacted extension.
+  
+  There will be console output as below:
+  ```sh
+     Redacted File: file_3.txt and stored successfully
+            ********************************************************************************************************************************************************************************************************
+  Redacted File: file_2.txt and stored successfully
+  **********************************************************************************************************************************************************************  **********************************
+  Redacted File: file_1.txt and stored successfully
+  ********************************************************************************************************************************************************************************************************
+  Redacted File: file_4.txt and stored successfully
+  ********************************************************************************************************************************************************************************************************
   ```
  * Running the pytests for the project with `pytest`
   ```sh
