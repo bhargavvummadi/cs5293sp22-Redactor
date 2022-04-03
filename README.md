@@ -140,7 +140,7 @@ explanation to run the project.
   There will be console output as below:
   ```sh
      Redacted File: file_3.txt and stored successfully
-           ********************************************************************************************************************************************************************************************************
+     *******************************************************************************************************************************************************************************************************
   Redacted File: file_2.txt and stored successfully
   **********************************************************************************************************************************************************************  **********************************
   Redacted File: file_1.txt and stored successfully
@@ -223,10 +223,12 @@ Generates fileteststats.txt stats output file.
 <!-- Assumptions -->
 ## Assumptions
 
-In this project to clear the edge cases of both double liners and empty cells, I have made two assumptions as follows:
+In this project to get all the flags redacted from the input fies, I have made some assumptions as follows:
 
-1. A double liner always contains capital letters in it and it occurs in only 3 column.
-2. All the empty cells are present in only 3 and 4 columns
+1. Names are correctly redacted using spacy
+2. Data is mostly from US based states.
+3. The Address format is as follows 'Area name, state-short-name  zipcode'
+4. Concept synonym might match with one of following words in the file.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -237,8 +239,11 @@ In this project to clear the edge cases of both double liners and empty cells, I
 
 As explained above if my assumptions are wrong there might be the following bugs.
 
-1. Irregular data slicing.
-2. Improper 'NaN' value insertions.
+1. Irregular data format in input files.
+2. Improper Address formats.
+3. Names might be not redacted because of spacy entities
+4. Some test files might not contain address or genders or phone numbers or concept.
+
 
 One might can experience problems while running the project, If they haven't
 
@@ -254,12 +259,15 @@ One might can experience problems while running the project, If they haven't
 This is the list resources I found helpful and would like to give credit to. I've included them below
 
 * [Python Docs](https://docs.python.org/)
-* [W3 Schools](https://www.w3schools.com/python/python_regex.asp)
+* [W3 Schools](https://www.w3schools.com/python/python_file_remove.asp)
 * [Kite](https://www.kite.com/python/answers/how-to-test-a-url-in-python)
 * [Geeks for Geeks](https://www.geeksforgeeks.org/check-if-table-exists-in-sqlite-using-python/)
-* [Stackoverflow](https://stackoverflow.com/questions/10253826/path-issue-with-pytest-importerror-no-module-named-yadayadayada?answertab=scoredesc#tab-top)
+* [Towards datascience](https://towardsdatascience.com/named-entity-recognition-with-nltk-and-spacy-8c4a7d88e7da)
+* [Medium](https://medium.com/@tusharsri/nlp-a-quick-guide-to-stemming-60f1ca5db49e)
+* [W3Resource](https://www.w3resource.com/python-exercises/nltk/nltk-corpus-exercise-7.php)
+* [Stackoverflow](https://stackoverflow.com/questions/12419998/find-numbers-in-a-sentence-by-regex)
 * [GitHub README.md](https://github.com/othneildrew/Best-README-Template#about-the-project)
-* [GitHub pytest Action](https://oudatalab.com/cs5293sp22/documents/ci)
+* [GitHub pytest Action](https://oudatalab.com/cs5293sp22/documents/ci) [It's not working because of installation of en_core_web_sm]
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
