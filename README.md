@@ -228,7 +228,8 @@ In this project to get all the flags redacted from the input fies, I have made s
 1. Names are correctly redacted using spacy
 2. Data is mostly from US based states.
 3. The Address format is as follows 'Area name, state-short-name  zipcode'
-4. Concept synonym might match with one of following words in the file.
+4. Genders might come from the (gender_list)list I provided, if not we can add other items to the list to make it redact.
+5. Concept synonym might match with one of following words in the file.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
