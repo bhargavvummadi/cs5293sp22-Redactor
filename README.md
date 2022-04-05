@@ -134,6 +134,10 @@ explanation to run the project.
   ```sh
      pipenv run python project1/redactor.py --input '*.txt'  --names --dates --phones --address --gender --concept 'kids' --output 'files/' --stats stats
   ```
+  or
+  ```sh
+      pipenv run python project1/redactor.py --input '*.txt' --names --dates --phones --address --gender --concept kid  --concept prison --concept presentation  --output 'files/' --stats stderr 
+  ```
   
   It will generate all redacted files and store them inside files/ folder with .redacted extension.
   
@@ -244,7 +248,7 @@ As explained above if my assumptions are wrong there might be the following bugs
 2. Improper Address formats.
 3. Names might be not redacted because of spacy entities
 4. Some test files might not contain address or genders or phone numbers or concept.
-
+5. Concept sometimes matching twice and incrementing the count.
 
 One might can experience problems while running the project, If they haven't
 
