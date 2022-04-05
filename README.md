@@ -235,6 +235,7 @@ In this project to get all the flags redacted from the input fies, I have made s
 3. The Address format is as follows 'Area name, state-short-name  zipcode'
 4. Genders might come from the (gender_list)list I provided, if not we can add other items to the list to make it redact.
 5. Concept synonym might match with one of following words in the file.
+6. I assumed to create stderr or stdout files using sys module by using commands like ```sys.stderr.write()``` and writing other files to stats or any other filenames that are passed as argument.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
