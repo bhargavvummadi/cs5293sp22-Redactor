@@ -117,6 +117,7 @@ explanation to run the project.
 * Now let's creata a virtual environment for our project using pipenv
   ```sh
     pipenv install
+    pipenv shell
   ```
   Activate the virtual environment with `pipenv shell`
 * Now we need to install required packages (if in case required)

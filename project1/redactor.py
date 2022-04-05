@@ -18,7 +18,6 @@ def main(args):
     '''
     ip = args.input
     concept = args.concept
-    print(concept)
     output = args.output
     stats = args.stats
     if os.path.exists(stats):
