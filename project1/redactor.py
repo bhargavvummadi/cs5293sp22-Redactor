@@ -18,6 +18,7 @@ def main(args):
     '''
     ip = args.input
     concept = args.concept
+    print(concept)
     output = args.output
     stats = args.stats
     if os.path.exists(stats):
@@ -56,6 +57,7 @@ if __name__ == '__main__':
     parser.add_argument("--genders", action='store_true', help="Gender Flag")
     parser.add_argument("--address", action='store_true', help="Address Flag")
     parser.add_argument("--concept",
+                        action='append',
                         type=str,
                         required=True,
                         help="Concept Word Flag")

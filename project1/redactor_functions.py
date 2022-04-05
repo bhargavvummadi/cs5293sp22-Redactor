@@ -23,6 +23,7 @@ import en_core_web_sm
 
 stderr_file = 0
 stdout_file = 0
+concept_count = 0
 
 
 def file_reader(filename, concept, output, stats):
@@ -64,8 +65,10 @@ def file_reader(filename, concept, output, stats):
     op = redact_date(op, write_stats_file)
     op = redact_gender(op, write_stats_file)
     op = redact_address(op, write_stats_file)
-    op = redact_concept(op, concept, write_stats_file)
+    for i in concept:
+        op = redact_concept(op, str(i), write_stats_file)
     write_output(output, op, wanted_filename)
+
     print('Redacted File:',wanted_filename, 'and stored successfully')
     print('*'*200)
 
@@ -93,11 +96,9 @@ def redact_name(file_content, write_stats_file):
         for token in doc:
             if token.ent_type_ == 'PERSON' or token.ent_type_ == 'GPE':
                 if stderr_file == 1:
-                    sys.stderr.write(token.ent_type_ + "---" + token.text +
-                                       "\n")
+                    sys.stderr.write(token.ent_type_ + "---" + token.text + "\n")
                 elif stdout_file == 1:
-                    sys.stdout.write(token.ent_type_ + "---" + token.text +
-                                       "\n")
+                    sys.stdout.write(token.ent_type_ + "---" + token.text + "\n")
                 else:
                     write_stats_file.write(token.ent_type_ + "---" + token.text +
                                        "\n")
@@ -534,8 +535,9 @@ def redact_concept(file_content, concept, write_stats_file):
         ----------------------------------------------------
         Redacted output list
     '''
-    concept_count = 0
+
     op = []
+    bl_flag  = False
     synonyms = []
     for syn in wordnet.synsets(concept):
         for l in syn.lemmas():
@@ -550,11 +552,16 @@ def redact_concept(file_content, concept, write_stats_file):
         flag = 0
         for r in l.split('.'):
             wl = nltk.word_tokenize(r)
+            for w in wl:
+                if str(w) in synonyms:
+                    bl_flag = True
             sw = [porterStemmer.stem(w) for w in wl]
             for token in sw:
-                if str(token) in synonyms:
+                if str(token) in synonyms or bl_flag == True:
+                    bl_flag = False
                     #print("Foud a match")
                     flag = 1
+                    global concept_count
                     concept_count += 1
                     if stderr_file ==1:
                         sys.stderr.write("CONCEPT" + "---" + r + "\n")
