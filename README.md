@@ -231,11 +231,13 @@ Generates fileteststats.txt stats output file.
 In this project to get all the flags redacted from the input fies, I have made some assumptions as follows:
 
 1. Names are correctly redacted using spacy
-2. Data is mostly from US based states.
-3. The Address format is as follows 'Area name, state-short-name  zipcode'
-4. Genders might come from the (gender_list)list I provided, if not we can add other items to the list to make it redact.
-5. Concept synonym might match with one of following words in the file.
-6. I assumed to create stderr or stdout files using sys module by using commands like ```sys.stderr.write()``` and writing other files to stats or any other filenames that are passed as argument.
+2. I have assumed that all arguments should be passed so that defaulty all flages (--names --dates --phones --address --gender --concept) are set to true, so all
+ should be passed while running the project.
+4. Data is mostly from US based states.
+5. The Address format is as follows 'Area name, state-short-name  zipcode'
+6. Genders might come from the (gender_list)list I provided, if not we can add other items to the list to make it redact.
+7. Concept synonym might match with one of following words in the file. Each concept word is present in a new line.
+8. I assumed to create stderr or stdout files using sys module by using commands like ```sys.stderr.write()``` and writing other files to stats or any other filenames that are passed as argument.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -247,10 +249,12 @@ In this project to get all the flags redacted from the input fies, I have made s
 As explained above if my assumptions are wrong there might be the following bugs.
 
 1. Irregular data format in input files.
-2. Improper Address formats.
-3. Names might be not redacted because of spacy entities
-4. Some test files might not contain address or genders or phone numbers or concept.
-5. Concept sometimes matching twice and incrementing the count.
+2. I am redacting in a list sequence and passing it to other methods, it might causes other flags get un-redactble when their turn comes.
+3. Redacting the entire sentence when concept matches from start of sentence to new line character (end of line not upto full stop character(.)).  
+4. Improper Address formats.
+5. Names might be not redacted because of spacy entities
+6. Some test files might not contain address or genders or phone numbers or concept.
+7. Concept sometimes matching twice and incrementing the count.
 
 One might can experience problems while running the project, If they haven't
 
