@@ -16,6 +16,20 @@ def main(args):
      which further calls other
      respective operations.
     '''
+    names      = args.names
+    datess     = args.dates
+    phone_num  = args.phones
+    gender     = args.genders
+    address    =  args.address
+    conceptt   =  args.concept
+
+    '''
+    print("names datess phone_num gender address conceptt")
+    print(names,datess,phone_num
+        ,gender
+        ,address
+        ,conceptt)
+    '''
     ip = args.input
     concept = args.concept
     output = args.output
@@ -35,7 +49,7 @@ def main(args):
         print(error)
     oppath =  output
     for f in files:
-        redactor_functions.file_reader(f, concept, oppath, stats)
+        redactor_functions.file_reader(f,names,datess,phone_num,gender,address,concept, oppath, stats)
 
 
 if __name__ == '__main__':

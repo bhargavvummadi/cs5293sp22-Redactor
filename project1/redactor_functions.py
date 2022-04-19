@@ -26,7 +26,7 @@ stdout_file = 0
 concept_count = 0
 
 
-def file_reader(filename, concept, output, stats):
+def file_reader(filename,names,datess,phone_num,gender,address,concept, output, stats):
     '''
        File_reader takes the following parameters
        Parameters
@@ -40,6 +40,11 @@ def file_reader(filename, concept, output, stats):
        the output redacted list is used in the consectuive 
        functions.
     '''
+    print("names datess phone_num gender address conceptt")
+    print(names, datess, phone_num
+          , gender
+          , address
+          , concept)
     file = open(filename, 'r')
     stats_file = stats
     write_stats_file = open(stats_file, "a", encoding="utf-8")
@@ -59,14 +64,20 @@ def file_reader(filename, concept, output, stats):
     else:
         write_stats_file.write(wanted_filename + "\n")
         write_stats_file.write('*' * 100 + "\n")
-        
-    op = redact_name(content, write_stats_file)
-    op = redact_phone(op, write_stats_file)
-    op = redact_date(op, write_stats_file)
-    op = redact_gender(op, write_stats_file)
-    op = redact_address(op, write_stats_file)
-    for i in concept:
-        op = redact_concept(op, str(i), write_stats_file)
+
+    if names == True:
+        op = redact_name(content, write_stats_file)
+    if phone_num == True:
+        op = redact_phone(op, write_stats_file)
+    if datess == True:
+        op = redact_date(op, write_stats_file)
+    if gender == True:
+        op = redact_gender(op, write_stats_file)
+    if address == True:
+        op = redact_address(op, write_stats_file)
+    if len(concept) > 0 or concept==True:
+        for i in concept:
+            op = redact_concept(op, str(i), write_stats_file)
     write_output(output, op, wanted_filename)
 
     print('Redacted File:',wanted_filename, 'and stored successfully')
