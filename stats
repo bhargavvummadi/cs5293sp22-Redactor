@@ -1,3 +1,132 @@
+filetest.txt
+****************************************************************************************************
+PERSON---Rita
+PERSON---Morales
+PERSON---<
+PERSON---Rita
+PERSON---gilbert
+PERSON---smith
+GPE---Austin
+PERSON---Don
+PERSON---Bender
+PERSON---Susan
+PERSON---Neel
+PERSON---Johnny
+PERSON---Roberts
+PERSON---Paul
+PERSON---McKinney
+PERSON---Dave
+PERSON---Odle
+PERSON---Sonya
+PERSON---Howell
+PERSON---John
+PERSON---Hudson
+PERSON---Susan
+PERSON---Neel
+PERSON---Rita
+PERSON---Morales
+PERSON---gilbert
+PERSON---smith
+PERSON---Corpus
+PERSON---Christi
+ NAME COUNT: 29
+PHONE-NUMBER---wk:972538-6983
+
+PHONE-NUMBER---972 538 - 6983
+PHONE-NUMBER---cell:972816-2118
+
+PHONE-NUMBER---972 816 - 2118
+PHONE-NUMBER---1-361-887-1600
+ PHONE-NUMBER-COUNT: 5
+DATE---Feb
+DATE---2002
+DATE---Friday
+DATE---2/01
+DATE---73071
+DATE---15_2_1.doc
+DATE---30
+DATE---Jan
+DATE---2002
+DATE---February
+DATE---14th
+DATE---and
+DATE---15th
+DATE---
+
+DATE---February
+DATE---14th
+DATE---and
+DATE---15th
+DATE---78401
+DATE-COUNT: 19
+GENDER---she
+GENDER---herself
+GENDER---he
+GENDER---him
+GENDER---father
+GENDER-COUNT :5
+ADDRESS---     900 N Shoreline Blvd 
+
+ADDRESS-COUNT :1
+CONCEPT--- Kids are playing in the school 
+CONCEPT-COUNT :1
+********************************************************************************************************************************************************************************************************
+CONCEPT---5 presentation that █ █ █ █ █ █ █ █ █ gave at RMS 
+CONCEPT-COUNT :2
+********************************************************************************************************************************************************************************************************
+file_1.txt
+****************************************************************************************************
+PERSON---Rita
+PERSON---Morales
+PERSON---<
+PERSON---Rita
+PERSON---gilbert
+PERSON---smith
+GPE---Austin
+PERSON---Don
+PERSON---Bender
+PERSON---Susan
+PERSON---Neel
+PERSON---Johnny
+PERSON---Roberts
+PERSON---Paul
+PERSON---McKinney
+PERSON---Dave
+PERSON---Odle
+PERSON---Sonya
+PERSON---Howell
+PERSON---John
+PERSON---Hudson
+PERSON---Susan
+PERSON---Neel
+PERSON---Rita
+PERSON---Morales
+ NAME COUNT: 25
+PHONE-NUMBER---wk:972538-6983
+
+PHONE-NUMBER---972 538 - 6983
+PHONE-NUMBER---cell:972816-2118
+
+PHONE-NUMBER---972 816 - 2118
+ PHONE-NUMBER-COUNT: 4
+DATE---Feb
+DATE---2002
+DATE---Friday
+DATE---2/01
+DATE---15_2_1.doc
+DATE-COUNT: 5
+GENDER---she
+GENDER---herself
+GENDER---he
+GENDER---him
+GENDER---father
+GENDER-COUNT :5
+ADDRESS-COUNT :0
+CONCEPT-COUNT :2
+********************************************************************************************************************************************************************************************************
+CONCEPT---5 presentation that █ █ █ █ █ █ █ █ █ gave at RMS 
+CONCEPT-COUNT :3
+********************************************************************************************************************************************************************************************************
 file_2.txt
 ****************************************************************************************************
 PERSON---Jae
@@ -186,7 +315,220 @@ DATE---2002
 DATE-COUNT: 29
 GENDER-COUNT :0
 ADDRESS-COUNT :0
-CONCEPT-COUNT :0
+CONCEPT-COUNT :3
 ********************************************************************************************************************************************************************************************************
-CONCEPT-COUNT :0
+CONCEPT-COUNT :3
+********************************************************************************************************************************************************************************************************
+file_3.txt
+****************************************************************************************************
+PERSON---gilbert
+PERSON---smith
+PERSON---Corpus
+PERSON---Christi
+ NAME COUNT: 4
+PHONE-NUMBER---1-361-887-1600
+ PHONE-NUMBER-COUNT: 1
+DATE---30
+DATE---Jan
+DATE---2002
+DATE---February
+DATE---14th
+DATE---and
+DATE---15th
+DATE---
+
+DATE---February
+DATE---14th
+DATE---and
+DATE---15th
+DATE---78401
+DATE-COUNT: 13
+GENDER-COUNT :0
+ADDRESS---     900 N Shoreline Blvd 
+
+ADDRESS-COUNT :1
+CONCEPT--- Kids are playing in the school 
+CONCEPT-COUNT :4
+********************************************************************************************************************************************************************************************************
+CONCEPT---     There is a urgent requirment for assigning presentation 
+CONCEPT-COUNT :5
+********************************************************************************************************************************************************************************************************
+file_4.txt
+****************************************************************************************************
+PERSON---Jae
+PERSON---William
+PERSON---<
+PERSON---Anubhav
+PERSON---Harry
+PERSON---Bailey
+PERSON---Debra
+PERSON---Russell
+GPE---Ballinger
+PERSON---Ted
+PERSON---Baughman
+PERSON---Jr.
+PERSON---Don
+GPE---Sbenchlu
+PERSON---Hicham
+PERSON---Robert
+PERSON---<
+PERSON---Corry
+PERSON---<
+PERSON---Jae
+GPE---Blaine
+PERSON---Jay
+PERSON---Bolt
+PERSON---Broderick
+PERSON---Paul
+PERSON---J.
+PERSON---<
+PERSON---Richard
+GPE---Burnett
+PERSON---Lisa
+PERSON---Larry
+PERSON---F.
+PERSON---<
+PERSON---/O
+GPE---Capasso
+PERSON---Joe
+PERSON---Carson
+PERSON---Mike
+PERSON---Chen
+PERSON---Alan
+PERSON---Cline
+PERSON---Kevin
+GPE---Collins
+GPE---Comeaux
+PERSON---Keith
+PERSON---Coulter
+PERSON---Kayne
+PERSON---Davis
+PERSON---Mark
+PERSON---Dana
+PERSON---Smith
+PERSON---L.
+PERSON---<
+PERSON---Dean
+PERSON---Todd
+PERSON---Gerald
+PERSON---Joe
+PERSON---John
+PERSON---M.
+PERSON---<
+PERSON---William
+PERSON---Garcia
+PERSON---Miguel
+PERSON---L.
+PERSON---<
+PERSON---Gilbert
+PERSON---Gerald
+PERSON---Gilbert
+PERSON----
+PERSON---smith
+PERSON---Doug
+PERSON---Greer
+GPE---Gualy
+GPE---Claudia
+GPE---Gulmeden
+GPE---Gupta
+GPE---Gautam
+PERSON---Patrick
+PERSON---Rika
+PERSON---Jenkins
+PERSON---IV
+PERSON---Daniel
+PERSON---<
+GPE---Kaniss
+PERSON---Jeff
+PERSON---Kinser
+PERSON---Larkworthy
+PERSON---Carrie
+PERSON---Dean
+PERSON---Chris
+PERSON---Lorenz
+PERSON---Matt
+PERSON---Lotz
+GPE---Lowell
+PERSON---Iris
+GPE---Mahajan
+PERSON---Tom
+PERSON---Alexander
+PERSON---Jeffrey
+PERSON---Olinde
+PERSON---Jr.
+PERSON---Steve
+PERSON---<
+PERSON---/O
+PERSON---Steve
+PERSON---<
+PERSON---Philip
+PERSON---Willis
+PERSON---Laura
+PERSON---John
+PERSON---D.
+PERSON---<
+PERSON---Kevin
+PERSON---M.
+PERSON---<
+GPE---Quenet
+PERSON---Joe
+GPE---Rawal
+PERSON---Andy
+PERSON---Benjamin
+PERSON---Bill
+PERSON---Ryan
+GPE---Saibi
+GPE---Eric
+PERSON---Michael
+GPE---Serio
+PERSON---Erik
+PERSON---Lisa
+GPE---Simpson
+PERSON---Erik
+GPE---Stalford
+PERSON---Robert
+PERSON---<
+PERSON---Joe
+PERSON---Fletcher
+PERSON---J.
+PERSON---<
+PERSON---/O
+PERSON---Paul
+PERSON---D.
+PERSON---<
+PERSON---/O
+GPE---Valdes
+PERSON---Maria
+PERSON---<
+PERSON---Steve
+PERSON---<
+PERSON---Williams
+PERSON---Ryan
+PERSON---Willis
+GPE---Zipperer
+PERSON---Mike
+PERSON---JHERNAN3
+PERSON---Kevin
+PERSON---Presto
+ NAME COUNT: 155
+PHONE-NUMBER---off.713-853-5800
+
+PHONE-NUMBER---fax713-646-8272
+
+PHONE-NUMBER---cell713-539-4760
+ PHONE-NUMBER-COUNT: 3
+DATE---Sday
+DATE---May
+DATE---Friday
+DATE---,
+DATE---September
+DATE---21st
+DATE---
+
+DATE-COUNT: 7
+GENDER-COUNT :0
+ADDRESS-COUNT :0
+CONCEPT-COUNT :5
+********************************************************************************************************************************************************************************************************
+CONCEPT-COUNT :5
 ********************************************************************************************************************************************************************************************************

@@ -31,6 +31,8 @@ def main(args):
         ,conceptt)
     '''
     ip = args.input
+    print('all the files')
+    print(ip)
     concept = args.concept
     output = args.output
     stats = args.stats
@@ -49,7 +51,11 @@ def main(args):
         print(error)
     oppath =  output
     for f in files:
-        redactor_functions.file_reader(f,names,datess,phone_num,gender,address,concept, oppath, stats)
+        print("file that checked ")
+        if "stats" in f or "stderr" in f or "stdout" in f:
+            print("need not be redacted",f)
+        else:
+            redactor_functions.file_reader(f,names,datess,phone_num,gender,address,concept, oppath, stats)
 
 
 if __name__ == '__main__':
