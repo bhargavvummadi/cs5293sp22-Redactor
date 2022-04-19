@@ -51,6 +51,9 @@ def file_reader(filename,names,datess,phone_num,gender,address,concept, output, 
     content = file.readlines()
 
     wanted_filename = str(filename).split('/')[0]
+    print("wanted filename")
+    print(filename)
+    print(wanted_filename)
 
 
     if stats_file == "stderr":

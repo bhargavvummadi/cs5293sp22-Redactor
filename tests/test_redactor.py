@@ -9,7 +9,7 @@ sys.path.append(os.getcwd() + '/project1')
 
 from project1 import redactor_functions
 
-tf = "tests/filetest.txt"
+tf = "filetest.txt"
 ts = "fileteststats.txt"
 
 tf_f = open(tf, 'r')
@@ -236,7 +236,7 @@ def test_write_output(concept,output,new_stats):
     except OSError as error:
         print(error)
     oppath = 'tests/' + output
-    redactor_functions.file_reader(tf,concept,oppath,new_stats)
+    redactor_functions.file_reader(tf,True,True,True,True,True,concept,oppath,new_stats)
 
     test_file_flag = 0
 
