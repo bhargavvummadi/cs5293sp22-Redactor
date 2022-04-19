@@ -3,7 +3,7 @@
 import argparse
 import glob
 import os
-import redactor_functions
+from project1 import redactor_functions
 import shutil
 
 
@@ -24,9 +24,8 @@ def main(args):
         os.remove(stats)
     else:
         pass
-    ip = 'project1/' + ip
     files = glob.glob(ip)
-    path = os.path.join('project1/', output)
+    path = os.path.join(output)
     if os.path.exists(path) and os.path.isdir(path):
         shutil.rmtree(path)
 
@@ -34,7 +33,7 @@ def main(args):
         os.makedirs(path, exist_ok=True)
     except OSError as error:
         print(error)
-    oppath = 'project1/' + output
+    oppath =  output
     for f in files:
         redactor_functions.file_reader(f, concept, oppath, stats)
 

@@ -45,7 +45,7 @@ def file_reader(filename, concept, output, stats):
     write_stats_file = open(stats_file, "a", encoding="utf-8")
     content = file.readlines()
 
-    wanted_filename = str(filename).split('/')[1]
+    wanted_filename = str(filename).split('/')[0]
 
 
     if stats_file == "stderr":
