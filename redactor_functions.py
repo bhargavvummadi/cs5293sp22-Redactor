@@ -4,6 +4,9 @@ import nltk
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
+
 from nltk.corpus import wordnet
 from nltk.stem.porter import *
 
@@ -24,7 +27,7 @@ import en_core_web_sm
 stderr_file = 0
 stdout_file = 0
 concept_count = 0
-
+stats_arr = []
 
 def file_reader(filename,names,datess,phone_num,gender,address,concept, output, stats):
     '''
@@ -40,61 +43,57 @@ def file_reader(filename,names,datess,phone_num,gender,address,concept, output, 
        the output redacted list is used in the consectuive 
        functions.
     '''
-    print("names datess phone_num gender address conceptt")
-    print(names, datess, phone_num
-          , gender
-          , address
-          , concept)
+    #print("names datess phone_num gender address conceptt")
+    #print(names, datess, phone_num
+          #, gender
+          #, address
+          #, concept)
     file = open(filename, 'r')
     stats_file = stats
-    write_stats_file = open(stats_file, "a", encoding="utf-8")
+    # = open(stats_file, "a", encoding="utf-8")
     content = file.readlines()
+    #print(filename)
+    wanted_f = ""
+    for i in str(filename):
+        if i=='\\' or i=='/':
+            wanted_f = str(filename).replace(i,',')
 
-    wanted_filename = str(filename).split('/')[0]
-    print("wanted filename")
-    print(filename)
-    print(wanted_filename)
 
+    wanted_filename = str(wanted_f).split(',')[1]
+    stats_arr.append(wanted_filename)
+    stats_arr.append("\n")
+    stats_arr.append('*'*100)
+    stats_arr.append("\n")
 
-    if stats_file == "stderr":
-        stderr_file = 1
-        sys.stderr.write(wanted_filename + "\n")
-        sys.stderr.write('*' * 100 + "\n")
-    elif stats_file == "stdout":
-        sys.stdout.write(wanted_filename + "\n")
-        sys.stdout.write('*' * 100 + "\n")
-        stdout_file = 1
-    else:
-        write_stats_file.write(wanted_filename + "\n")
-        write_stats_file.write('*' * 100 + "\n")
 
     if names == True:
-        op = redact_name(content, write_stats_file)
+        op = redact_name(content)
     if phone_num == True:
-        op = redact_phone(op, write_stats_file)
+        op = redact_phone(op)
     if datess == True:
-        op = redact_date(op, write_stats_file)
+        op = redact_date(op)
     if gender == True:
-        op = redact_gender(op, write_stats_file)
+        op = redact_gender(op)
     if address == True:
-        op = redact_address(op, write_stats_file)
+        op = redact_address(op)
     if len(concept) > 0 or concept==True:
         for i in concept:
-            op = redact_concept(op, str(i), write_stats_file)
+            op = redact_concept(op, str(i))
     write_output(output, op, wanted_filename)
+    write_stats_filee(stats)
 
-    print('Redacted File:',wanted_filename, 'and stored successfully')
-    print('*'*200)
+    #print('Redacted File:',wanted_filename, 'and stored successfully')
+    #print('*'*200)
 
 
-def redact_name(file_content, write_stats_file):
+def redact_name(file_content ):
     '''
         This method redact_name takes the following parameters
         as input
         Parameters
         ------------------------------------------------------
         file_content - actual content of the file
-        write_stats_file - Write status file 
+         - Write status file 
         -----------------------------------------------------
         Using spacy redacted with '\u2588' 
         based up on token.ent_type
@@ -102,20 +101,28 @@ def redact_name(file_content, write_stats_file):
         -----------------------------------------------------
         Redacted output list
     '''
+    personss = []
+    namee = ""
+    for x in file_content:
+        for s in nltk.sent_tokenize(x):
+            tokens = nltk.tokenize.word_tokenize(s)
+            pos = nltk.pos_tag(tokens)
+            sent = nltk.ne_chunk(pos, False)
+            for subtree in sent.subtrees(filter = lambda t:t.label()== 'PERSON'):
+                for leaf in subtree.leaves():
+                    print('found person through nltk', leaf[0])
+                    personss.append(str(leaf[0]).lower())
+
+
     nlp_obj = spacy.load("en_core_web_sm")
     op = []
     name_count = 0
     for l in file_content:
         doc = nlp_obj(l)
         for token in doc:
-            if token.ent_type_ == 'PERSON' or token.ent_type_ == 'GPE':
-                if stderr_file == 1:
-                    sys.stderr.write(token.ent_type_ + "---" + token.text + "\n")
-                elif stdout_file == 1:
-                    sys.stdout.write(token.ent_type_ + "---" + token.text + "\n")
-                else:
-                    write_stats_file.write(token.ent_type_ + "---" + token.text +
-                                       "\n")
+            if token.ent_type_ == 'PERSON' or token.ent_type_ == 'GPE' or token.text.lower() in personss:
+                stats_arr.append(token.ent_type_ + "---" + token.text)
+                stats_arr.append("\n")
                 name_count = name_count + 1
                 for i in range(len(token)):
                     op.append('\u2588')
@@ -123,25 +130,22 @@ def redact_name(file_content, write_stats_file):
             else:
                 op.append(token.text)
                 op.append(" ")
-    if stderr_file == 1:
-        sys.stderr.write(" NAME COUNT: " + str(name_count) + "\n")
-    elif stdout_file == 1:
-        sys.stdout.write(" NAME COUNT: " + str(name_count) + "\n")
-    else:
-        write_stats_file.write(" NAME COUNT: " + str(name_count) + "\n")
+
+    stats_arr.append(" NAME COUNT: " + str(name_count))
+    stats_arr.append("\n")
 
 
     return op
 
 
-def redact_phone(file_content, write_stats_file):
+def redact_phone(file_content ):
     '''
         This method redact_phone takes the following parameters
         as input
         Parameters
         ------------------------------------------------------
         file_content - actual content of the file
-        write_stats_file - Write status file
+         - Write status file
         -----------------------------------------------------
         Using spacy redacted with '\u2588'
         based up on matched pattern using spacy
@@ -200,23 +204,18 @@ def redact_phone(file_content, write_stats_file):
             temp_temp = temp_temp.replace(" ", "")
             temp_temp2 = " ".join(re.findall(r"\d+", temp))
             if (re.search(pattern2, temp_temp)):
-                if stderr_file ==1:
-                    sys.stderr.write("PHONE-NUMBER" + "---" + temp_temp +
-                                           "\n")
-                elif stdout_file == 1:
-                    sys.stdout.write("PHONE-NUMBER" + "---" + temp_temp +
-                                           "\n")
-                else:
-                    write_stats_file.write("PHONE-NUMBER" + "---" + temp_temp +
-                                       "\n")
+                stats_arr.append("PHONE-NUMBER" + "---" + temp_temp)
+                stats_arr.append("\n")
                 phone_number_count += 1
                 flag = 1
                 for i in range(len(temp)):
                     op.append('\u2588')
                 op.append("\n")
             elif (re.search(pattern3, temp_temp2)):
-                write_stats_file.write("PHONE-NUMBER" + "---" + temp_temp +
-                                       "\n")
+                stats_arr.append("PHONE-NUMBER" + "---" + temp_temp)
+                stats_arr.append("\n")
+                #write("PHONE-NUMBER" + "---" + temp_temp +
+                #                       "\n")
                 flag = 1
                 phone_number_count += 1
                 for i in range(len(temp)):
@@ -234,8 +233,11 @@ def redact_phone(file_content, write_stats_file):
                 for match_id, start, end in matches:
                     span = doc[start:end]
                     phone_number_count += 1
-                    write_stats_file.write("PHONE-NUMBER" + "---" +
-                                           span.text.strip() + "\n")
+                    stats_arr.append("PHONE-NUMBER" + "---" +
+                                           span.text.strip())
+                    stats_arr.append("\n")
+                    #.write("PHONE-NUMBER" + "---" +
+                    #                       span.text.strip() + "\n")
                     for k in span.text.strip():
                         op.append('\u2588')
                     op.append("\n")
@@ -251,42 +253,41 @@ def redact_phone(file_content, write_stats_file):
     lastmissingline_temp2 = " ".join(re.findall(r"\d+", lastmissingline))
     if (re.search(pattern2, lastmissingline_temp)):
         phone_number_count += 1
-        write_stats_file.write("PHONE-NUMBER" + "---" + lastmissingline_temp +
-                               "\n")
+        stats_arr.append("PHONE-NUMBER" + "---" + lastmissingline_temp)
+        stats_arr.append("\n")
+        #.write("PHONE-NUMBER" + "---" + lastmissingline_temp +
+        #                       "\n")
         for i in range(len(lastmissingline)):
             op.append('\u2588')
         op.append(" ")
     elif (re.search(pattern3, lastmissingline_temp2)):
         phone_number_count += 1
-        write_stats_file.write("PHONE-NUMBER" + "---" + lastmissingline_temp +
-                               "\n")
+        stats_arr.append("PHONE-NUMBER" + "---" + lastmissingline_temp)
+        stats_arr.append("\n")
+        #.write("PHONE-NUMBER" + "---" + lastmissingline_temp +
+        #                       "\n")
         for i in range(len(lastmissingline)):
             op.append('\u2588')
         op.append(" ")
     else:
         op.append(lastmissingline)
 
-    if stderr_file == 1:
-        sys.stderr.write(" PHONE-NUMBER-COUNT: " + str(phone_number_count) +
-                               "\n")
-    elif stdout_file == 1:
-        sys.stdout.write(" PHONE-NUMBER-COUNT: " + str(phone_number_count) +
-                               "\n")
-    else:
-        write_stats_file.write(" PHONE-NUMBER-COUNT: " + str(phone_number_count) +
-                           "\n")
-    #print("".join(op))
+
+    stats_arr.append(" PHONE-NUMBER-COUNT: " + str(phone_number_count))
+    stats_arr.append("\n")
+
+    ##print("".join(op))
     return op
 
 
-def redact_date(file_content, write_stats_file):
+def redact_date(file_content ):
     '''
         This method redact_date takes the following parameters
         as input
         Parameters
         ------------------------------------------------------
         file_content - actual content of the file
-        write_stats_file - Write status file
+         - Write status file
         -----------------------------------------------------
         Using spacy redacted with '\u2588'
         based up on matched pattern using spacy
@@ -301,7 +302,7 @@ def redact_date(file_content, write_stats_file):
     for l in file_content:
         doc = nlp_obj(l)
         for token in doc:
-            #print(token,token.ent_type_)
+            ##print(token,token.ent_type_)
             all = re.findall(r"[\d]{1,2}/[\d]{1,2}/[\d]{4}", token.text)
             all2 = re.findall(r"[\d]{1,2}-[\d]{1,2}-[\d]{2}", token.text)
             all3 = re.findall(r"[\d]{1,2} [ADFJMNOS]\w* [\d]{4}", token.text)
@@ -309,36 +310,30 @@ def redact_date(file_content, write_stats_file):
             if token.ent_type_ == 'DATE' or len(all) > 0 or len(
                     all2) > 0 or len(all3) > 0 or len(all4) > 0:
                 date_count += 1
-                if stderr_file ==1:
-                    sys.stderr.write("DATE" + "---" + token.text + "\n")
-                elif stdout_file == 1:
-                    sys.stdout.write("DATE" + "---" + token.text + "\n")
-                else:
-                    write_stats_file.write("DATE" + "---" + token.text + "\n")
+                stats_arr.append("DATE" + "---" + token.text)
+                stats_arr.append("\n")
                 for i in range(len(token.text)):
                     op.append('\u2588')
                 op.append(" ")
             else:
                 op.append(token.text)
                 op.append(" ")
-    if stderr_file == 1:
-        sys.stderr.write("DATE-COUNT: " + str(date_count) + "\n")
-    elif stdout_file == 1:
-        sys.stdout.write("DATE-COUNT: " + str(date_count) + "\n")
-    else:
-        write_stats_file.write("DATE-COUNT: " + str(date_count) + "\n")
-    #print("".join(op))
+
+    stats_arr.append("DATE-COUNT: " + str(date_count))
+    stats_arr.append("\n")
+
+    ##print("".join(op))
     return op
 
 
-def redact_gender(file_content, write_stats_file):
+def redact_gender(file_content):
     '''
         This method redact_gender takes the following parameters
         as input
         Parameters
         ------------------------------------------------------
         file_content - actual content of the file
-        write_stats_file - Write status file
+         - Write status file
         -----------------------------------------------------
         Using spacy redacted with '\u2588'
         based up on matched list elements
@@ -355,10 +350,16 @@ def redact_gender(file_content, write_stats_file):
     matcher = Matcher(nlp_obj.vocab)
     matcher.add("gender", [pattern])
     '''
-    gender_list = [
-        "she", "he", "him", "her", "his", "father", "mother", "man", "woman",
-        "men", "women", "male", "female", "herself", "himself"
-    ]
+    gender_list = { 'he', 'himself', 'guy', 'spokesman', 'chairman', "men's", 'men', 'him', "he's", 'his', 'boy', 'boyfriend',
+                   'boyfriends', 'boys', 'brother', 'brothers', 'dad', 'dads', 'dude', 'father', 'fathers', 'fiance',
+                   'gentleman', 'gentlemen', 'god', 'grandfather', 'grandpa', 'grandson', 'groom',
+                   'husband', 'husbands', 'king', 'male', 'man', 'mr', 'nephew', 'nephews', 'priest', 'prince', 'son',
+                   'sons', 'uncle', 'uncles', 'waiter', 'widower', 'widowers', 'heroine', 'spokeswoman', 'chairwoman',
+                   "women's", 'actress', 'women', "she's", 'her', 'aunt', 'aunts', 'bride', 'daughter', 'daughters',
+                   'female', 'fiancee', 'girl', 'girlfriend', 'girlfriends', 'girls', 'goddess', 'granddaughter',
+                   'grandma', 'grandmother', 'herself', 'ladies', 'lady', 'lady', 'mom', 'moms', 'mother', 'mothers',
+                   'mrs', 'ms', 'niece', 'nieces', 'priestess', 'princess', 'queens', 'she', 'sister', 'sisters',
+                   'waitress', 'widow', 'widows', 'wife', 'wives', 'woman'}
     op = []
     for l in file_content:
         doc = nlp_obj(l)
@@ -366,47 +367,37 @@ def redact_gender(file_content, write_stats_file):
         matches = matcher(doc)
         for match_id, start, end in matches:
             span = doc[start:end]
-            print(span)
+            #print(span)
         '''
         for token in doc:
-            #print(token,token.ent_type_)
+            ##print(token,token.ent_type_)
             if token.ent_type_ == 'PERSON' or token.ent_type_ == 'GPE' or token.text.lower(
             ) in gender_list:
                 if token.text.lower() in gender_list:
                     gender_count += 1
-                    if stderr_file ==1:
-                        sys.stderr.write("GENDER" + "---" +
-                                               token.text.lower() + "\n")
-                    elif stdout_file ==1:
-                        sys.stdout.write("GENDER" + "---" +
-                                               token.text.lower() + "\n")
-                    else:
-                        write_stats_file.write("GENDER" + "---" +
-                                           token.text.lower() + "\n")
+                    stats_arr.append("GENDER" + "---" +
+                                               token.text.lower())
+                    stats_arr.append("\n")
                 for i in range(len(token)):
                     op.append('\u2588')
                 op.append(" ")
             else:
                 op.append(token.text)
                 #op.append(" ")
-    #print("".join(op))
-    if stderr_file==1:
-        sys.stderr.write("GENDER-COUNT :" + str(gender_count) + "\n")
-    elif stdout_file==1:
-        sys.stdout.write("GENDER-COUNT :" + str(gender_count) + "\n")
-    else:
-        write_stats_file.write("GENDER-COUNT :" + str(gender_count) + "\n")
+    ##print("".join(op))
+    stats_arr.append("GENDER-COUNT :" + str(gender_count))
+    stats_arr.append("\n")
     return op
 
 
-def redact_address(file_content, write_stats_file):
+def redact_address(file_content ):
     '''
         This method redact_address takes the following parameters
         as input
         Parameters
         ------------------------------------------------------
         file_content - actual content of the file
-        write_stats_file - Write status file
+         - Write status file
         -----------------------------------------------------
         Using spacy redacted with '\u2588'
         based up on list based matching and
@@ -496,21 +487,19 @@ def redact_address(file_content, write_stats_file):
             ll = temp.strip().split(" ")
             if (re.search(pattern1, temp)):
                 address_count += 1
-                if stderr_file ==1:
-                    sys.stderr.write("ADDRESS" + "---" + temp + "\n")
-                elif stdout_file == 1:
-                    sys.stdout.write("ADDRESS" + "---" + temp + "\n")
-                else:
-                    write_stats_file.write("ADDRESS" + "---" + temp + "\n")
+                stats_arr.append("ADDRESS" + "---" + temp)
+                stats_arr.append("\n")
                 for i in range(len(temp)):
                     op.append('\u2588')
                 op.append("\n")
-            #print(op)
+            ##print(op)
             elif (re.search(pattern2, temp)):
                 tl = temp.split(" ")
                 if set(tl).intersection(set(us_states.keys())):
                     address_count += 1
-                    write_stats_file.write("ADDRESS" + "---" + temp + "\n")
+                    stats_arr.append("ADDRESS" + "---" + temp)
+                    stats_arr.append("\n")
+                    #.write("ADDRESS" + "---" + temp + "\n")
                     for i in range(len(temp)):
                         op.append('\u2588')
                     op.append("\n")
@@ -522,24 +511,21 @@ def redact_address(file_content, write_stats_file):
             temp += file_content[i]
 
     op.append(lastmissingline)
-    if stderr_file==1:
-        sys.stderr.write("ADDRESS-COUNT :" + str(address_count) + "\n")
-    elif stdout_file ==1:
-        sys.stdout.write("ADDRESS-COUNT :" + str(address_count) + "\n")
-    else:
-        write_stats_file.write("ADDRESS-COUNT :" + str(address_count) + "\n")
-    #print("".join(op))
+
+    stats_arr.append("ADDRESS-COUNT :" + str(address_count))
+    stats_arr.append("\n")
+    ##print("".join(op))
     return op
 
 
-def redact_concept(file_content, concept, write_stats_file):
+def redact_concept(file_content, concept ):
     '''
         This method redact_concept takes the following parameters
         as input
         Parameters
         ------------------------------------------------------
         file_content - actual content of the file
-        write_stats_file - Write status file
+         - Write status file
         concept - a word used to redact any matched concept
         -----------------------------------------------------
         Using spacy redacted with '\u2588'
@@ -573,17 +559,13 @@ def redact_concept(file_content, concept, write_stats_file):
             for token in sw:
                 if str(token) in synonyms or bl_flag == True:
                     bl_flag = False
-                    #print("Foud a match")
+                    ##print("Foud a match")
                     flag = 1
                     global concept_count
                     concept_count += 1
-                    if stderr_file ==1:
-                        sys.stderr.write("CONCEPT" + "---" + r + "\n")
-                    elif stdout_file ==1:
-                        sys.stdout.write("CONCEPT" + "---" + r + "\n")
-                    else:
-                        write_stats_file.write("CONCEPT" + "---" + r + "\n")
-                    #print(token)
+                    stats_arr.append("CONCEPT" + "---" + str(token))
+                    stats_arr.append("\n")
+                    ##print(token)
             if flag == 1:
                 for i in range(len(r)):
                     op.append('\u2588')
@@ -591,16 +573,13 @@ def redact_concept(file_content, concept, write_stats_file):
         if flag != 1:
             op.append(l)
             op.append("\n")
-    if stderr_file ==1:
-        sys.stderr.write("CONCEPT-COUNT :" + str(concept_count) + "\n")
-        sys.stderr.write('*' * 200 + '\n')
-    elif stdout_file ==1:
-        sys.stdout.write("CONCEPT-COUNT :" + str(concept_count) + "\n")
-        sys.stdout.write('*' * 200 + '\n')
-    else:
-        write_stats_file.write("CONCEPT-COUNT :" + str(concept_count) + "\n")
-        write_stats_file.write('*' * 200 + '\n')
-    #print("".join(op))
+
+    stats_arr.append("CONCEPT-COUNT :" + str(concept_count))
+    stats_arr.append("\n")
+    stats_arr.append('*' * 200)
+    stats_arr.append('\n')
+
+    ##print("".join(op))
     return op
 
 
@@ -618,9 +597,22 @@ def write_output(dirr, res, filename):
         filename.redacted
         ----------------------------------------------------
     '''
-    #print("".join(res))
-    filename = str(filename).split('.')[0]
+    ##print("".join(res))
+    #filename = str(filename).split('.')[0]
     req_file = filename + '.redacted'
+    ##print(dirr + req_file)
     op_file = open(dirr + req_file, "w", encoding="utf-8")
     op_file.write("".join(res))
     op_file.close()
+
+    ##print(stats_arr)
+
+def write_stats_filee(stats):
+    if stats == 'stdout':
+        sys.stdout.write("".join(stats_arr))
+    elif stats == 'stderr':
+        sys.stderr.write("".join(stats_arr))
+    else:
+        ff = open(stats,"w", encoding="utf-8")
+        ff.writelines(stats_arr)
+    pass

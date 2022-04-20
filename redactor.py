@@ -3,7 +3,7 @@
 import argparse
 import glob
 import os
-from project1 import redactor_functions
+import redactor_functions
 import shutil
 
 
@@ -30,7 +30,7 @@ def main(args):
         ,address
         ,conceptt)
     '''
-    ip = args.input
+    ip = "docs/"+args.input
     print('all the files')
     print(ip)
     concept = args.concept
@@ -55,7 +55,7 @@ def main(args):
         if "stats" in f or "stderr" in f or "stdout" in f:
             print("need not be redacted",f)
         else:
-            redactor_functions.file_reader(f,names,datess,phone_num,gender,address,concept, oppath, stats)
+            redactor_functions.file_reader(f, names, datess, phone_num, gender, address, concept, oppath, stats)
 
 
 if __name__ == '__main__':
