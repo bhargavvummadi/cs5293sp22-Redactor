@@ -16,13 +16,12 @@ def main(args):
      which further calls other
      respective operations.
     '''
-    names      = args.names
-    datess     = args.dates
-    phone_num  = args.phones
-    gender     = args.genders
-    address    =  args.address
-    conceptt   =  args.concept
-
+    names = args.names
+    datess = args.dates
+    phone_num = args.phones
+    gender = args.genders
+    address = args.address
+    conceptt = args.concept
     '''
     print("names datess phone_num gender address conceptt")
     print(names,datess,phone_num
@@ -30,7 +29,7 @@ def main(args):
         ,address
         ,conceptt)
     '''
-    ip = "docs/"+args.input
+    ip = "docs/" + args.input
     print('all the files')
     print(ip)
     concept = args.concept
@@ -49,13 +48,14 @@ def main(args):
         os.makedirs(path, exist_ok=True)
     except OSError as error:
         print(error)
-    oppath =  output
+    oppath = output
     for f in files:
         print("file that checked ")
         if "stats" in f or "stderr" in f or "stdout" in f:
-            print("need not be redacted",f)
+            print("need not be redacted", f)
         else:
-            redactor_functions.file_reader(f, names, datess, phone_num, gender, address, concept, oppath, stats)
+            redactor_functions.file_reader(f, names, datess, phone_num, gender,
+                                           address, concept, oppath, stats)
 
 
 if __name__ == '__main__':

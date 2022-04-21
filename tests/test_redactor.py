@@ -191,3 +191,9 @@ def test_write_output(concept,output,new_stats):
         test_file_flag = 1
 
     assert test_file_flag > 0
+
+def test_stats_output(new_stats):
+    found = 0
+    if os.path.exists(new_stats):
+        found = 1
+    assert  found > 0

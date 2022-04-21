@@ -21,7 +21,6 @@ import spacy
 from spacy.matcher import Matcher
 import en_core_web_sm
 
-
 #Global flags
 
 stderr_file = 0
@@ -29,7 +28,9 @@ stdout_file = 0
 concept_count = 0
 stats_arr = []
 
-def file_reader(filename,names,datess,phone_num,gender,address,concept, output, stats):
+
+def file_reader(filename, names, datess, phone_num, gender, address, concept,
+                output, stats):
     '''
        File_reader takes the following parameters
        Parameters
@@ -45,9 +46,9 @@ def file_reader(filename,names,datess,phone_num,gender,address,concept, output, 
     '''
     #print("names datess phone_num gender address conceptt")
     #print(names, datess, phone_num
-          #, gender
-          #, address
-          #, concept)
+    #, gender
+    #, address
+    #, concept)
     file = open(filename, 'r')
     stats_file = stats
     # = open(stats_file, "a", encoding="utf-8")
@@ -55,30 +56,44 @@ def file_reader(filename,names,datess,phone_num,gender,address,concept, output, 
     #print(filename)
     wanted_f = ""
     for i in str(filename):
-        if i=='\\' or i=='/':
-            wanted_f = str(filename).replace(i,',')
-
+        if i == '\\' or i == '/':
+            wanted_f = str(filename).replace(i, ',')
 
     wanted_filename = str(wanted_f).split(',')[1]
     stats_arr.append(wanted_filename)
     stats_arr.append("\n")
-    stats_arr.append('*'*100)
+    stats_arr.append('*' * 100)
     stats_arr.append("\n")
-
 
     if names == True:
         op = redact_name(content)
     if phone_num == True:
-        op = redact_phone(op)
+        if names == False and datess == False and gender == False and address == False:
+            op = redact_phone(content)
+        else:
+            op = redact_phone(op)
     if datess == True:
-        op = redact_date(op)
+        if names == False and phone_num == False and gender == False and address == False:
+            op = redact_date(content)
+        else:
+            op = redact_date(op)
     if gender == True:
-        op = redact_gender(op)
+        if names == False and datess == False and phone_num == False and address == False:
+            op = redact_gender(content)
+        else:
+            op = redact_gender(op)
     if address == True:
-        op = redact_address(op)
-    if len(concept) > 0 or concept==True:
-        for i in concept:
-            op = redact_concept(op, str(i))
+        if names == False and datess == False and gender == False and phone_num == False:
+            op = redact_address(content)
+        else:
+            op = redact_address(op)
+    if len(concept) > 0 or concept == True:
+        if names == False and datess == False and gender == False and address == False and phone_num == False:
+            for i in concept:
+                op = redact_concept(content, str(i))
+        else:
+            for i in concept:
+                op = redact_concept(op, str(i))
     write_output(output, op, wanted_filename)
     write_stats_filee(stats)
 
@@ -86,7 +101,7 @@ def file_reader(filename,names,datess,phone_num,gender,address,concept, output, 
     #print('*'*200)
 
 
-def redact_name(file_content ):
+def redact_name(file_content):
     '''
         This method redact_name takes the following parameters
         as input
@@ -108,11 +123,11 @@ def redact_name(file_content ):
             tokens = nltk.tokenize.word_tokenize(s)
             pos = nltk.pos_tag(tokens)
             sent = nltk.ne_chunk(pos, False)
-            for subtree in sent.subtrees(filter = lambda t:t.label()== 'PERSON'):
+            for subtree in sent.subtrees(
+                    filter=lambda t: t.label() == 'PERSON'):
                 for leaf in subtree.leaves():
                     print('found person through nltk', leaf[0])
                     personss.append(str(leaf[0]).lower())
-
 
     nlp_obj = spacy.load("en_core_web_sm")
     op = []
@@ -120,7 +135,8 @@ def redact_name(file_content ):
     for l in file_content:
         doc = nlp_obj(l)
         for token in doc:
-            if token.ent_type_ == 'PERSON' or token.ent_type_ == 'GPE' or token.text.lower() in personss:
+            if token.ent_type_ == 'PERSON' or token.ent_type_ == 'GPE' or token.text.lower(
+            ) in personss:
                 stats_arr.append(token.ent_type_ + "---" + token.text)
                 stats_arr.append("\n")
                 name_count = name_count + 1
@@ -134,11 +150,10 @@ def redact_name(file_content ):
     stats_arr.append(" NAME COUNT: " + str(name_count))
     stats_arr.append("\n")
 
-
     return op
 
 
-def redact_phone(file_content ):
+def redact_phone(file_content):
     '''
         This method redact_phone takes the following parameters
         as input
@@ -234,7 +249,7 @@ def redact_phone(file_content ):
                     span = doc[start:end]
                     phone_number_count += 1
                     stats_arr.append("PHONE-NUMBER" + "---" +
-                                           span.text.strip())
+                                     span.text.strip())
                     stats_arr.append("\n")
                     #.write("PHONE-NUMBER" + "---" +
                     #                       span.text.strip() + "\n")
@@ -272,7 +287,6 @@ def redact_phone(file_content ):
     else:
         op.append(lastmissingline)
 
-
     stats_arr.append(" PHONE-NUMBER-COUNT: " + str(phone_number_count))
     stats_arr.append("\n")
 
@@ -280,7 +294,7 @@ def redact_phone(file_content ):
     return op
 
 
-def redact_date(file_content ):
+def redact_date(file_content):
     '''
         This method redact_date takes the following parameters
         as input
@@ -303,12 +317,15 @@ def redact_date(file_content ):
         doc = nlp_obj(l)
         for token in doc:
             ##print(token,token.ent_type_)
-            all = re.findall(r"[\d]{1,2}/[\d]{1,2}/[\d]{4}", token.text)
-            all2 = re.findall(r"[\d]{1,2}-[\d]{1,2}-[\d]{2}", token.text)
-            all3 = re.findall(r"[\d]{1,2} [ADFJMNOS]\w* [\d]{4}", token.text)
-            all4 = re.findall(r"[\d]{1,2} [adfjmnos]\w* [\d]{4}", token.text)
-            if token.ent_type_ == 'DATE' or len(all) > 0 or len(
-                    all2) > 0 or len(all3) > 0 or len(all4) > 0:
+            all = re.findall(r"[\d]{1,2}/[\d]{1,2}/[\d]{4}", str(token.text))
+            all2 = re.findall(r"[\d]{1,2}-[\d]{1,2}-[\d]{2}", str(token.text))
+            all3 = re.findall(r"[\d]{1,2} [ADFJMNOS]\w* [\d]{4}",
+                              str(token.text))
+            all4 = re.findall(r"[\d]{1,2} [adfjmnos]\w* [\d]{4}",
+                              str(token.text))
+            if token.ent_type_ == 'DATE' or  str(
+                    token.text) in all or str(token.text) in all2 or str(
+                        token.text) in all3 or str(token.text) in all4:
                 date_count += 1
                 stats_arr.append("DATE" + "---" + token.text)
                 stats_arr.append("\n")
@@ -350,16 +367,22 @@ def redact_gender(file_content):
     matcher = Matcher(nlp_obj.vocab)
     matcher.add("gender", [pattern])
     '''
-    gender_list = { 'he', 'himself', 'guy', 'spokesman', 'chairman', "men's", 'men', 'him', "he's", 'his', 'boy', 'boyfriend',
-                   'boyfriends', 'boys', 'brother', 'brothers', 'dad', 'dads', 'dude', 'father', 'fathers', 'fiance',
-                   'gentleman', 'gentlemen', 'god', 'grandfather', 'grandpa', 'grandson', 'groom',
-                   'husband', 'husbands', 'king', 'male', 'man', 'mr', 'nephew', 'nephews', 'priest', 'prince', 'son',
-                   'sons', 'uncle', 'uncles', 'waiter', 'widower', 'widowers', 'heroine', 'spokeswoman', 'chairwoman',
-                   "women's", 'actress', 'women', "she's", 'her', 'aunt', 'aunts', 'bride', 'daughter', 'daughters',
-                   'female', 'fiancee', 'girl', 'girlfriend', 'girlfriends', 'girls', 'goddess', 'granddaughter',
-                   'grandma', 'grandmother', 'herself', 'ladies', 'lady', 'lady', 'mom', 'moms', 'mother', 'mothers',
-                   'mrs', 'ms', 'niece', 'nieces', 'priestess', 'princess', 'queens', 'she', 'sister', 'sisters',
-                   'waitress', 'widow', 'widows', 'wife', 'wives', 'woman'}
+    gender_list = {
+        'he', 'himself', 'guy', 'spokesman', 'chairman', "men's", 'men', 'him',
+        "he's", 'his', 'boy', 'boyfriend', 'boyfriends', 'boys', 'brother',
+        'brothers', 'dad', 'dads', 'dude', 'father', 'fathers', 'fiance',
+        'gentleman', 'gentlemen', 'god', 'grandfather', 'grandpa', 'grandson',
+        'groom', 'husband', 'husbands', 'king', 'male', 'man', 'mr', 'nephew',
+        'nephews', 'priest', 'prince', 'son', 'sons', 'uncle', 'uncles',
+        'waiter', 'widower', 'widowers', 'heroine', 'spokeswoman',
+        'chairwoman', "women's", 'actress', 'women', "she's", 'her', 'aunt',
+        'aunts', 'bride', 'daughter', 'daughters', 'female', 'fiancee', 'girl',
+        'girlfriend', 'girlfriends', 'girls', 'goddess', 'granddaughter',
+        'grandma', 'grandmother', 'herself', 'ladies', 'lady', 'lady', 'mom',
+        'moms', 'mother', 'mothers', 'mrs', 'ms', 'niece', 'nieces',
+        'priestess', 'princess', 'queens', 'she', 'sister', 'sisters',
+        'waitress', 'widow', 'widows', 'wife', 'wives', 'woman'
+    }
     op = []
     for l in file_content:
         doc = nlp_obj(l)
@@ -375,8 +398,7 @@ def redact_gender(file_content):
             ) in gender_list:
                 if token.text.lower() in gender_list:
                     gender_count += 1
-                    stats_arr.append("GENDER" + "---" +
-                                               token.text.lower())
+                    stats_arr.append("GENDER" + "---" + token.text.lower())
                     stats_arr.append("\n")
                 for i in range(len(token)):
                     op.append('\u2588')
@@ -390,7 +412,7 @@ def redact_gender(file_content):
     return op
 
 
-def redact_address(file_content ):
+def redact_address(file_content):
     '''
         This method redact_address takes the following parameters
         as input
@@ -518,7 +540,7 @@ def redact_address(file_content ):
     return op
 
 
-def redact_concept(file_content, concept ):
+def redact_concept(file_content, concept):
     '''
         This method redact_concept takes the following parameters
         as input
@@ -537,7 +559,7 @@ def redact_concept(file_content, concept ):
     '''
 
     op = []
-    bl_flag  = False
+    bl_flag = False
     synonyms = []
     for syn in wordnet.synsets(concept):
         for l in syn.lemmas():
@@ -607,12 +629,13 @@ def write_output(dirr, res, filename):
 
     ##print(stats_arr)
 
+
 def write_stats_filee(stats):
     if stats == 'stdout':
         sys.stdout.write("".join(stats_arr))
     elif stats == 'stderr':
         sys.stderr.write("".join(stats_arr))
     else:
-        ff = open(stats,"w", encoding="utf-8")
+        ff = open(stats, "w", encoding="utf-8")
         ff.writelines(stats_arr)
-    pass
+
