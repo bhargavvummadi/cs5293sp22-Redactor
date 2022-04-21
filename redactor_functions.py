@@ -6,7 +6,6 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
-nltk.download('averaged_perceptron_tagger')
 
 from nltk.corpus import wordnet
 from nltk.stem.porter import *
@@ -42,7 +41,7 @@ def file_reader(filename, names, datess, phone_num, gender, address, concept,
        stats - stats file to store statistics of all redacted files
        ------------------------------------------
        calls all other functions and gets redacted output and
-       the output redacted list is used in the consectuive 
+       the output redacted list is used in the consectuive
        functions.
     '''
     #print("names datess phone_num gender address conceptt")
@@ -109,9 +108,9 @@ def redact_name(file_content):
         Parameters
         ------------------------------------------------------
         file_content - actual content of the file
-         - Write status file 
+         - Write status file
         -----------------------------------------------------
-        Using spacy redacted with '\u2588' 
+        Using spacy redacted with '\u2588'
         based up on token.ent_type
         Return
         -----------------------------------------------------
@@ -127,7 +126,7 @@ def redact_name(file_content):
             for subtree in sent.subtrees(
                     filter=lambda t: t.label() == 'PERSON'):
                 for leaf in subtree.leaves():
-                    print('found person through nltk', leaf[0])
+                    #print('found person through nltk', leaf[0])
                     personss.append(str(leaf[0]).lower())
 
     nlp_obj = spacy.load("en_core_web_sm")

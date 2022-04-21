@@ -23,15 +23,15 @@ def main(args):
     address = args.address
     conceptt = args.concept
     '''
-    print("names datess phone_num gender address conceptt")
-    print(names,datess,phone_num
+    #print("names datess phone_num gender address conceptt")
+    #print(names,datess,phone_num
         ,gender
         ,address
         ,conceptt)
     '''
     ip = "docs/" + args.input
-    print('all the files')
-    print(ip)
+    #print('all the files')
+    #print(ip)
     concept = args.concept
     output = args.output
     stats = args.stats
@@ -50,7 +50,7 @@ def main(args):
         print(error)
     oppath = output
     for f in files:
-        print("file that checked ")
+        #print("file that checked ")
         if "stats" in f or "stderr" in f or "stdout" in f:
             print("need not be redacted", f)
         else:
