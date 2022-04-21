@@ -6,6 +6,7 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
+nltk.download('averaged_perceptron_tagger')
 
 from nltk.corpus import wordnet
 from nltk.stem.porter import *
