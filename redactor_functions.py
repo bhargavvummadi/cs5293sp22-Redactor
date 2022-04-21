@@ -49,6 +49,8 @@ def file_reader(filename, names, datess, phone_num, gender, address, concept,
     #, gender
     #, address
     #, concept)
+    global stats_arr
+    stats_arr = []
     file = open(filename, 'r')
     stats_file = stats
     # = open(stats_file, "a", encoding="utf-8")
@@ -636,6 +638,7 @@ def write_stats_filee(stats):
     elif stats == 'stderr':
         sys.stderr.write("".join(stats_arr))
     else:
-        ff = open(stats, "w", encoding="utf-8")
+        ff = open(stats, "a", encoding="utf-8")
         ff.writelines(stats_arr)
+
 
