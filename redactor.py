@@ -3,9 +3,12 @@
 import argparse
 import glob
 import os
+import sys
+
 import redactor_functions
 import shutil
 
+errr_arr = []
 
 def main(args):
     '''
@@ -30,8 +33,15 @@ def main(args):
         ,conceptt)
     '''
     ip = "docs/" + args.input
+    errfl = 0
     #print('all the files')
     #print(ip)
+    if os.path.exists(ip):
+        pass
+    else:
+        errfl = 1
+        #print("File Not Exsists give file present in docs/ folder through stderr")
+        errr_arr.append("File Not Exsists give file present in docs/ folder through stderr")
     concept = args.concept
     output = args.output
     stats = args.stats
@@ -39,6 +49,8 @@ def main(args):
         os.remove(stats)
     else:
         pass
+    if stats == "stderr" and errfl == 1:
+        sys.stderr.write(errr_arr[0])
     files = glob.glob(ip)
     path = os.path.join(output)
     if os.path.exists(path) and os.path.isdir(path):
@@ -54,6 +66,7 @@ def main(args):
         if "stats" in f or "stderr" in f or "stdout" in f:
             print("need not be redacted", f)
         else:
+
             redactor_functions.file_reader(f, names, datess, phone_num, gender,
                                            address, concept, oppath, stats)
 

@@ -27,7 +27,7 @@ stderr_file = 0
 stdout_file = 0
 concept_count = 0
 stats_arr = []
-
+err_arr = []
 
 def file_reader(filename, names, datess, phone_num, gender, address, concept,
                 output, stats):
@@ -51,7 +51,12 @@ def file_reader(filename, names, datess, phone_num, gender, address, concept,
     #, concept)
     global stats_arr
     stats_arr = []
-    file = open(filename, 'r')
+    global  err_arr
+    err_arr = []
+    try:
+        file = open(filename, 'r')
+    except OSError:
+        err_arr.append("Error File not Found through ")
     stats_file = stats
     # = open(stats_file, "a", encoding="utf-8")
     content = file.readlines()
@@ -66,6 +71,14 @@ def file_reader(filename, names, datess, phone_num, gender, address, concept,
     stats_arr.append("\n")
     stats_arr.append('*' * 100)
     stats_arr.append("\n")
+
+    try:
+        s = 10 + "Dff"
+    except TypeError:
+        err_arr.append("Type Error Occured just to test stderr")
+
+
+
 
     if names == True:
         op = redact_name(content)
@@ -636,7 +649,7 @@ def write_stats_filee(stats):
     if stats == 'stdout':
         sys.stdout.write("".join(stats_arr))
     elif stats == 'stderr':
-        sys.stderr.write("".join(stats_arr))
+        sys.stderr.write("".join(err_arr))
     else:
         ff = open(stats, "a", encoding="utf-8")
         ff.writelines(stats_arr)
