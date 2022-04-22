@@ -1,6 +1,8 @@
 ___
 * Changed the file structer --- removed project1 folder and made redactor.py 
 and redactor_functions.py kept under root directory. Here is the snapshot.
+![image](https://user-images.githubusercontent.com/52027911/164752379-325f30f9-94e2-4dfa-95b4-8a67792c5e08.png)
+* 
 * Moved all the testfiles into docs folder if you want to test project with custom testfiles please do consider keeping inputfiles insides the **docs** directory and running the project
 * Made changes in the redactor.py and redactor_functions.py , In redactor.py made changes to enable single flag testing, for instance passing name only flag and other flags which are mandatory.
 * In redactor_functions.py I have added nltk for redacting names in addition to spacy, I have added more genders to gender_list to redact more genders.
