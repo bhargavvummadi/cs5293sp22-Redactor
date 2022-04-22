@@ -36,7 +36,7 @@ def main(args):
     errfl = 0
     #print('all the files')
     #print(ip)
-    if os.path.exists(ip):
+    if os.path.exists(ip) or str(args.input).startswith('*.'):
         pass
     else:
         errfl = 1

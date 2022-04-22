@@ -76,6 +76,7 @@ def file_reader(filename, names, datess, phone_num, gender, address, concept,
         s = 10 + "Dff"
     except TypeError:
         err_arr.append("Type Error Occured just to test stderr")
+        err_arr.append("\n")
 
 
 
